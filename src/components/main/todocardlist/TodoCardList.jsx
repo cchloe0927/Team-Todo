@@ -23,7 +23,7 @@ const TodoCardList = ({ progressName }) => {
   const [newTodos, setnewTodos] = useState([]);
 
   const data = todos.filter((element) => element.progress === progressName);
-  console.log(data);
+  //console.log(data);
 
   const arrowIcon = {
     done: <HiOutlineArrowCircleLeft size="45" color="white" />,
@@ -45,9 +45,9 @@ const TodoCardList = ({ progressName }) => {
     // const newTodo = [...todos];
     // console.log(id);
     const todo = todos?.find((todo) => todo.id === id);
-    console.log(todo);
+    //console.log(todo);
     const newTodo = { ...todo };
-    console.log(newTodo);
+    //console.log(newTodo);
     // console.log("index:", index);
     // console.log(todos[index].id);
     // console.log(newTodo[index].progress);

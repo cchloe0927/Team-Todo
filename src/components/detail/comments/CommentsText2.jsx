@@ -6,10 +6,6 @@ import Card from "../../elements/Card";
 import Button from "../../elements/Button";
 import AddComments from "./AddComments";
 //redux
-import {
-  editCheckDisabled,
-  editCommentValue,
-} from "../../../redux/modules/commentsReducer";
 import { commentsAction } from "../../../redux/actions/commentsAction";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -18,11 +14,12 @@ const Comments = () => {
   const { paramsId } = useParams();
 
   //전체 comments 데이터 추출
-  const { comments } = useSelector((state) => state.comments);
-  //console.log("comments :", comments);
-
+  const commentsDataRedux = useSelector((state) => state.comments.comments);
+  //console.log("commentsDataRedux :", commentsDataRedux);
   //commnet State
-  const [editcommentValue, setEditCommentValue] = useState("");
+  const [commentValue, setCommentValue] = useState("");
+  //editCheck State
+  const [editCheckBoolean, setEditCheckBoolean] = useState(false);
 
   //해당 댓글 등록하기 -> get 요청하는 함수 생성
   const GetComments = () => {
@@ -38,21 +35,35 @@ const Comments = () => {
     dispatch(commentsAction.deleteComment(commentId));
   };
 
-  //버튼 클릭 시, editCheck Boolean
-  const onClickEditButtonHandler = (commentIndex) => {
-    dispatch(editCheckDisabled(commentIndex));
-  };
-
   //해당 댓글 수정하기
   //textarea value state
   const onChangeTextareaCommentHandler = (event, commentIndex) => {
-    dispatch(editCommentValue(event, commentIndex));
+    //textarea value 가져오기 event.target.value
+    const newArr = [...commentsDataRedux];
+    newArr[commentIndex].comment = event.target.value;
+    const newArrComment = newArr[commentIndex].comment;
+    setCommentValue(newArrComment);
+  };
+
+  const onClickEditButtonHandler = (commentId, commentIndex) => {
+    /** 순서 중요!
+     * 버튼 클릭 시, 조건문에 불합 -> editCheckBoolean State true로 변경!
+     * true인 경우 textarea태그 활성화되서 값 변경 가능
+     * event.target.value로 변경 값 읽어와서
+     * 다시 버튼 클릭하면 editCheck이 false가 되면서 조건 충족하여 patch함!
+     */
+    const newArr = [...commentsDataRedux];
+    if (newArr[commentIndex].editCheck) {
+      dispatch(commentsAction.patchComment(commentId, commentValue));
+    }
+    newArr[commentIndex].editCheck = !editCheckBoolean;
+    setEditCheckBoolean(!editCheckBoolean);
   };
 
   return (
     <div>
       <AddComments />
-      {comments.map((comment, index) => {
+      {commentsDataRedux.map((comment, index) => {
         return (
           <Card className={classes.comment_wrap} key={comment.id}>
             <form
@@ -65,7 +76,9 @@ const Comments = () => {
                   <span className={classes.date}>{comment.createDate}</span>
                 </label>
                 <div className={classes.btn}>
-                  <Button onClick={() => onClickEditButtonHandler(index)}>
+                  <Button
+                    onClick={() => onClickEditButtonHandler(comment.id, index)}
+                  >
                     {comment.editCheck ? "완료" : "수정"}
                   </Button>
                   <Button
