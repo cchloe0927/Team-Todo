@@ -10,8 +10,8 @@ const Todo = () => {
   const { paramsId } = useParams();
   const [todos, setTodos] = useState([]);
   const [edit, setEdit] = useState(false);
- 
- const fetchTodos = async () => {
+
+  const fetchTodos = async () => {
     const { data } = await axios.get(
       `${process.env.REACT_APP_DB_URL}/todos/${paramsId}`
     );
@@ -23,7 +23,7 @@ const Todo = () => {
     setTodos([...todos, todos]);
   };
 
- // const contentsDataRedux = useSelector((state) => state.contents.contents);
+  // const contentsDataRedux = useSelector((state) => state.contents.contents);
 
   // const onChangeTextareaCommentHandler = (event, contentIndex) => {
   //   const newArr = [...contentsDataRedux];
@@ -35,7 +35,7 @@ const Todo = () => {
   const onClickEditButtonHandler = (todosId) => {
     setEdit(!edit);
     if (edit === true) {
-      axios.patch(`${process.env.REACT_APP_DB_URL}/todos/${todoId}`, {
+      axios.patch(`${process.env.REACT_APP_DB_URL}/todos/${todosId}`, {
         content: todosId,
       });
       // } else {
