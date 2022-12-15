@@ -14,10 +14,16 @@ const AddTodoPage = () => {
   console.log(AddModal);
   console.log(todoList);
 
+  const layoutStyle = {
+    maxWidth: "1200px",
+    minWidth: "900px",
+    minHeight: "800px",
+    display: "flex",
+    flexDirection: "column",
+    margin: "auto",
+  };
   return (
-    <div>
-      <h3>Team's Todo Add Todo</h3>
-      <hr />
+    <div style={{ ...layoutStyle }}>
       <div>
         <AddTodoForm modal={modal} />
       </div>

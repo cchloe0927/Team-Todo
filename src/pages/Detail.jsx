@@ -1,5 +1,3 @@
-//components
-import Layout from "../components/Layout";
 import Todo from "../components/todo/Todo";
 import Comments from "../components/detail/comments/Comments";
 
@@ -9,10 +7,10 @@ import CommentsStateTest from "../components/detail/comments/CommentsStateTest";
 
 const Detail = () => {
   return (
-    <Layout>
+    <>
       <Todo />
-      <CommentsStateTest />
-    </Layout>
+      <Comments />
+    </>
   );
 };
 
