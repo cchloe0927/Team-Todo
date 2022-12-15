@@ -38,7 +38,6 @@ const TodoCardList = ({ progressName }) => {
   const onToggleStatusTodo = (id) => {
     const todo = todos?.find((todo) => todo.id === id);
     const newTodo = { ...todo };
-
     if (newTodo.progress === "plan") {
       newTodo.progress = "working";
       axios
