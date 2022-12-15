@@ -14,6 +14,7 @@ const AddTodoForm = (props) => {
 
   const [state, setState] = useState({ title: "", content: "" });
   const [when, setWhen] = useState({ checked: false, value: "" });
+  const [inputCheck, setInputCheck] = useState({ id: "", check: "success" });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,16 +49,18 @@ const AddTodoForm = (props) => {
       when: when.value,
       createDate: date,
     };
+
     if (state.title === "") {
-      alert("제목을 입력해주세요");
+      setInputCheck({ ...inputCheck, id: "title", check: "fail" });
     } else if (state.content === "") {
-      alert("내용을 입력해주세요");
+      setInputCheck({ ...inputCheck, id: "content", check: "fail" });
     } else if (when.value === "") {
-      alert("언제할지 선택해주세요");
+      setInputCheck({ ...inputCheck, id: "when", check: "fail" });
     }
+
     if (state.title && state.content !== "" && when.value !== "") {
       await axios
-        .post("https://wild-insidious-parsnip.glitch.me/todos", newTodo, {
+        .post(`${process.env.REACT_APP_DB_URL}/todos`, newTodo, {
           headers: { "Content-Type": "application/json" },
         })
         .then(function (response) {
@@ -75,20 +78,24 @@ const AddTodoForm = (props) => {
       radioInput3.current.checked = false;
       titleInput.current.focus();
       props.modal.clicked = true;
+      setInputCheck({ ...inputCheck, id: "", check: "success" });
     }
   };
   return (
     <div>
+      <Button
+        className={classes.addTodoGobackbtn}
+        onClick={() => navigate("/")}
+      >
+        이전으로
+      </Button>
       <div className={classes.addTodoContainer}>
-        <Button
-          className={classes.addTodoGobackbtn}
-          onClick={() => navigate("/")}
-        >
-          이전으로
-        </Button>
         <form className={classes.formContainer}>
           <div className={classes.inputTitleDiv}>
-            <label style={{}} htmlFor="title">
+            <label
+              style={{ marginTop: "30px", fontSize: "24px" }}
+              htmlFor="title"
+            >
               제목
             </label>
             <textarea
@@ -102,8 +109,16 @@ const AddTodoForm = (props) => {
               required
             />
           </div>
+          {inputCheck.id === "title" && inputCheck.check === "fail" ? (
+            <div className={classes.alertTxt}>제목을 입력해주세요</div>
+          ) : (
+            <div className={classes.alertTxt}></div>
+          )}
           <div className={classes.inputContentDiv}>
-            <label style={{}} htmlFor="content">
+            <label
+              style={{ marginTop: "30px", fontSize: "24px" }}
+              htmlFor="content"
+            >
               내용
             </label>
             <textarea
@@ -115,6 +130,11 @@ const AddTodoForm = (props) => {
               required
             />
           </div>
+          {inputCheck.id === "content" && inputCheck.check === "fail" ? (
+            <div className={classes.alertTxt}>내용을 입력해주세요</div>
+          ) : (
+            <div className={classes.alertTxt}></div>
+          )}
 
           <div className={classes.inputWhenSelect}>
             <label className={classes.inputWhenMorning}>
@@ -126,7 +146,7 @@ const AddTodoForm = (props) => {
                 onChange={whenStateChangeHandler}
                 ref={radioInput1}
               />
-              <span>오전 (AM)</span>
+              <span style={{ fontSize: "24px" }}>오전 (AM)</span>
             </label>
 
             <label className={classes.inputWhenAfternoon}>
@@ -138,7 +158,7 @@ const AddTodoForm = (props) => {
                 onChange={whenStateChangeHandler}
                 ref={radioInput2}
               />
-              <span> 오후 (PM)</span>
+              <span style={{ fontSize: "24px" }}> 오후 (PM)</span>
             </label>
 
             <label className={classes.inputWhenEvening}>
@@ -150,9 +170,14 @@ const AddTodoForm = (props) => {
                 onChange={whenStateChangeHandler}
                 ref={radioInput3}
               />
-              <span>밤 (Night)</span>
+              <span style={{ fontSize: "24px" }}>밤 (Night)</span>
             </label>
           </div>
+          {inputCheck.id === "when" && inputCheck.check === "fail" ? (
+            <div className={classes.alertTxt}>언제 할 일인지 선택해주세요</div>
+          ) : (
+            <div className={classes.alertTxt}></div>
+          )}
         </form>
         <Button className={classes.addTodoBtn} onClick={addTodoHandler}>
           추가
