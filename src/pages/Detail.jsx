@@ -11,7 +11,7 @@ const Detail = () => {
   return (
     <Layout>
       <Todo />
-      <Comments />
+      <CommentsStateTest />
     </Layout>
   );
 };

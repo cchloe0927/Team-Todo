@@ -30,28 +30,8 @@ const deleteComment = (commentId) => {
   };
 };
 
-const patchComment = (commentId, commentValue) => {
-  return async (dispatch, getState) => {
-    await axios.patch(
-      `https://wild-insidious-parsnip.glitch.me/comments/${commentId}`,
-      {
-        comment: commentValue,
-      }
-    );
-    dispatch({ type: "PATCH_COMMENT" });
-  };
-};
-
-// const editComment = (editCheck, commentIndex) => {
-//   return (dispatch) => {
-//     dispatch({ type: "EDIT_COMMENT_DISABLED" });
-//   };
-// };
-
 export const commentsAction = {
   postComment,
   getComments,
   deleteComment,
-  patchComment,
-  // editComment,
 };
