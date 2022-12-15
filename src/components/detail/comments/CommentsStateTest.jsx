@@ -12,6 +12,7 @@ import {
 } from "../../../redux/modules/commentsReducer";
 import { commentsAction } from "../../../redux/actions/commentsAction";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 const Comments = () => {
   const dispatch = useDispatch();
@@ -20,10 +21,6 @@ const Comments = () => {
   //전체 comments 데이터 추출
   const { comments } = useSelector((state) => state.comments);
   console.log("comments :", comments);
-
-  //commnet State
-  const [editcommentValue, setEditCommentValue] = useState();
-  console.log();
 
   //해당 댓글 등록하기 -> get 요청하는 함수 생성
   const GetComments = () => {
@@ -40,14 +37,26 @@ const Comments = () => {
   };
 
   //버튼 클릭 시, editCheck Boolean
-  const onClickEditButtonHandler = (commentIndex) => {
+  const onClickEditButtonHandler = (commentIndex, editcheck, commentId) => {
+    const editedValue = comments[commentIndex].comment;
+    if (editcheck) {
+      axios.patch(
+        `https://wild-insidious-parsnip.glitch.me/comments/${commentId}`,
+        {
+          comment: editedValue,
+        }
+      );
+    }
+    //editCheck 상태값 변경
     dispatch(editCheckDisabled(commentIndex));
   };
 
   //해당 댓글 수정하기
   //textarea value state
   const onChangeTextareaCommentHandler = (event, commentIndex) => {
-    dispatch(editCommentValue(event, commentIndex));
+    const value = event.target.value;
+    console.log("val", value, "idx", commentIndex);
+    dispatch(editCommentValue({ value: value, index: commentIndex }));
   };
 
   return (
@@ -66,7 +75,15 @@ const Comments = () => {
                   <span className={classes.date}>{comment.createDate}</span>
                 </label>
                 <div className={classes.btn}>
-                  <Button onClick={() => onClickEditButtonHandler(index)}>
+                  <Button
+                    onClick={() =>
+                      onClickEditButtonHandler(
+                        index,
+                        comment.editCheck,
+                        comment.id
+                      )
+                    }
+                  >
                     {comment.editCheck ? "완료" : "수정"}
                   </Button>
                   <Button

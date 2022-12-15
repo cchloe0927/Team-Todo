@@ -37,16 +37,8 @@ const patchComment = (commentId, commentValue) => {
   };
 };
 
-// const editComment = (editCheck, commentIndex) => {
-//   return (dispatch) => {
-//     dispatch({ type: "EDIT_COMMENT_DISABLED" });
-//   };
-// };
-
 export const commentsAction = {
   postComment,
   getComments,
   deleteComment,
-  patchComment,
-  // editComment,
 };
