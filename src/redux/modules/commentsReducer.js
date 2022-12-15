@@ -42,6 +42,7 @@ const commentsReducer = (state = initialState, action) => {
     case EDIT_COMMENT_DISABLED:
       const newArr = [...state.comments];
       newArr[action.payload].editCheck = !newArr[action.payload].editCheck;
+      console.log(newArr);
       return {
         ...state,
         comments: newArr,

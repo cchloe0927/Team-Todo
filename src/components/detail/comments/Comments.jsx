@@ -19,10 +19,11 @@ const Comments = () => {
 
   //전체 comments 데이터 추출
   const { comments } = useSelector((state) => state.comments);
-  //console.log("comments :", comments);
+  console.log("comments :", comments);
 
   //commnet State
-  const [editcommentValue, setEditCommentValue] = useState("");
+  const [editcommentValue, setEditCommentValue] = useState();
+  console.log();
 
   //해당 댓글 등록하기 -> get 요청하는 함수 생성
   const GetComments = () => {
